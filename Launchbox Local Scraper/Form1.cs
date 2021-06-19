@@ -47,12 +47,9 @@ namespace Launchbox_Local_Scraper
             bool skipPlats = checkBoxSkipPlats.Checked;
             bool doThemes = checkBoxDoThemes.Checked;
             bool doSnaps = checkBoxDoSnaps.Checked;
-            bool doAudio = checkBoxDoAudio.Checked;
-            bool doImages = checkBoxDoImages.Checked;
             string lbPath = textBoxLBInstallationPath.Text;
             string allVideosPath = textBoxVidsPath.Text;
-            string allAudioPath = textBoxAudioPath.Text;
-            string allImagesPath = textBoxImagesPath.Text;
+
 
             //  bool isAllVideosPathOnANetwork = checkIfOriginalFilesAreOnANetwork(allVideosPath);/////////////////////////////
             bool isAllVideosPathOnANetwork = false;
@@ -76,7 +73,7 @@ namespace Launchbox_Local_Scraper
                 platXmlList = lBSettingsFile.SelectNodes("/LaunchBox/Platform");
 
             getFilesToBeCopied(ref filesToBeCopied, platXmlList, lbPath, allVideosPath,
-             maxTriesPerGame, skipPlats, doThemes, isAllVideosPathOnANetwork, weAreOnlyDoingOnePlat, doSnaps, doAudio, doImages, allAudioPath, allImagesPath);
+             maxTriesPerGame, skipPlats, doThemes, isAllVideosPathOnANetwork, weAreOnlyDoingOnePlat, doSnaps);
 
             if (filesToBeCopied.Count > 0)
             {
@@ -88,8 +85,7 @@ namespace Launchbox_Local_Scraper
         }
 
         private void getFilesToBeCopied(ref List<FileToBeCopied> filesToBeCopied, XmlNodeList platXmlList, string lbPath, 
-            string allVideosPath, int maxTries, bool skipPlats, bool doThemes, bool isAllVideosPathOnANetwork, bool weAreOnlyDoingOnePlatform, bool doSnaps,
-            bool doAudio, bool doImages, string allAudioPath, string allImagesPath)
+            string allVideosPath, int maxTries, bool skipPlats, bool doThemes, bool isAllVideosPathOnANetwork, bool weAreOnlyDoingOnePlatform, bool doSnaps)
         {
             
             XmlDocument launchboxSettingsFile = getLBSettingsFile(lbPath);
@@ -97,8 +93,7 @@ namespace Launchbox_Local_Scraper
             XmlNodeList xmListPlatforms = launchboxSettingsFile.SelectNodes("/LaunchBox/PlatformFolder");
 
             filesProcessor filesProcessor = new filesProcessor(lbPath, allVideosPath, checkBoxAutoRename.Checked,
-                launchboxSettingsFile, xmListPlatforms, weAreOnlyDoingOnePlatform,  listBoxGames, skipPlats,  isAllVideosPathOnANetwork, maxTries, doThemes, doSnaps,
-                doAudio, doImages, allAudioPath, allImagesPath);
+                launchboxSettingsFile, xmListPlatforms, weAreOnlyDoingOnePlatform,  listBoxGames, skipPlats,  isAllVideosPathOnANetwork, maxTries, doThemes, doSnaps);
 
             foreach (XmlNode gamePlat in platXmlList)
             {
@@ -313,8 +308,6 @@ namespace Launchbox_Local_Scraper
             checkBoxRunForOnePlatform.Checked = Properties.Settings.Default.runForOnePlatform;
             checkBoxDoThemes.Checked = Properties.Settings.Default.doThemesAlso;
             checkBoxDoSnaps.Checked = Properties.Settings.Default.doVideoSnaps;
-            checkBoxDoAudio.Checked = Properties.Settings.Default.doAudio;
-            checkBoxDoImages.Checked = Properties.Settings.Default.doImages;
             enableOrDisableOnePlatformModeControls();
         }
 
@@ -328,8 +321,6 @@ namespace Launchbox_Local_Scraper
             Properties.Settings.Default.runForOnePlatform = checkBoxRunForOnePlatform.Checked;
             Properties.Settings.Default.doThemesAlso = checkBoxDoThemes.Checked;
             Properties.Settings.Default.doVideoSnaps = checkBoxDoSnaps.Checked;
-            Properties.Settings.Default.doAudio = checkBoxDoAudio.Checked;
-            Properties.Settings.Default.doImages = checkBoxDoImages.Checked;
 
             Properties.Settings.Default.Save();
         }
@@ -437,16 +428,6 @@ namespace Launchbox_Local_Scraper
         private void checkBoxDoSnaps_CheckedChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void AudioPathBrowseButton_Click(object sender, EventArgs e)
-        {
-            launchFolderBrowser("Select the original videos folder", textBoxAudioPath);
-        }
-
-        private void ImagesPathBrowseButton_Click(object sender, EventArgs e)
-        {
-            launchFolderBrowser("Select the original videos folder", textBoxImagesPath);
         }
     }
 }

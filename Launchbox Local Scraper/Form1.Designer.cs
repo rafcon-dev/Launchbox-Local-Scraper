@@ -42,8 +42,6 @@
             this.checkBoxSkipPlats = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoRename = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.textBoxAudioPath = new System.Windows.Forms.TextBox();
-            this.textBoxImagesPath = new System.Windows.Forms.TextBox();
             this.comboBoxPlatforms = new System.Windows.Forms.ComboBox();
             this.buttonGetSystems = new System.Windows.Forms.Button();
             this.checkBoxRunForOnePlatform = new System.Windows.Forms.CheckBox();
@@ -53,12 +51,6 @@
             this.buttonGuide = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.checkBoxDoAudio = new System.Windows.Forms.CheckBox();
-            this.checkBoxDoImages = new System.Windows.Forms.CheckBox();
-            this.audioPathBrowseButton = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.imagesPathBrowseButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBoxOneSystem.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -68,7 +60,7 @@
             this.buttonRun.BackColor = System.Drawing.Color.GreenYellow;
             this.buttonRun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRun.Location = new System.Drawing.Point(368, 248);
+            this.buttonRun.Location = new System.Drawing.Point(366, 159);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(176, 56);
             this.buttonRun.TabIndex = 10;
@@ -98,7 +90,7 @@
             // listBoxGames
             // 
             this.listBoxGames.FormattingEnabled = true;
-            this.listBoxGames.Location = new System.Drawing.Point(8, 208);
+            this.listBoxGames.Location = new System.Drawing.Point(6, 119);
             this.listBoxGames.Name = "listBoxGames";
             this.listBoxGames.Size = new System.Drawing.Size(221, 277);
             this.listBoxGames.TabIndex = 6;
@@ -126,7 +118,7 @@
             this.buttonCorrectVideoFoldersName.BackColor = System.Drawing.Color.LightBlue;
             this.buttonCorrectVideoFoldersName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonCorrectVideoFoldersName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCorrectVideoFoldersName.Location = new System.Drawing.Point(235, 322);
+            this.buttonCorrectVideoFoldersName.Location = new System.Drawing.Point(233, 233);
             this.buttonCorrectVideoFoldersName.Name = "buttonCorrectVideoFoldersName";
             this.buttonCorrectVideoFoldersName.Size = new System.Drawing.Size(312, 24);
             this.buttonCorrectVideoFoldersName.TabIndex = 11;
@@ -179,22 +171,6 @@
             this.toolTip1.SetToolTip(this.checkBoxAutoRename, "Renames the original videos with the correct name");
             this.checkBoxAutoRename.UseVisualStyleBackColor = true;
             // 
-            // textBoxAudioPath
-            // 
-            this.textBoxAudioPath.Location = new System.Drawing.Point(120, 94);
-            this.textBoxAudioPath.Name = "textBoxAudioPath";
-            this.textBoxAudioPath.Size = new System.Drawing.Size(344, 20);
-            this.textBoxAudioPath.TabIndex = 17;
-            this.toolTip1.SetToolTip(this.textBoxAudioPath, "Path of all the videos");
-            // 
-            // textBoxImagesPath
-            // 
-            this.textBoxImagesPath.Location = new System.Drawing.Point(120, 131);
-            this.textBoxImagesPath.Name = "textBoxImagesPath";
-            this.textBoxImagesPath.Size = new System.Drawing.Size(344, 20);
-            this.textBoxImagesPath.TabIndex = 20;
-            this.toolTip1.SetToolTip(this.textBoxImagesPath, "Path of all the videos");
-            // 
             // comboBoxPlatforms
             // 
             this.comboBoxPlatforms.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -243,7 +219,7 @@
             // checkBoxDoThemes
             // 
             this.checkBoxDoThemes.AutoSize = true;
-            this.checkBoxDoThemes.Location = new System.Drawing.Point(240, 253);
+            this.checkBoxDoThemes.Location = new System.Drawing.Point(238, 198);
             this.checkBoxDoThemes.Name = "checkBoxDoThemes";
             this.checkBoxDoThemes.Size = new System.Drawing.Size(105, 17);
             this.checkBoxDoThemes.TabIndex = 9;
@@ -253,7 +229,7 @@
             // checkBoxDoSnaps
             // 
             this.checkBoxDoSnaps.AutoSize = true;
-            this.checkBoxDoSnaps.Location = new System.Drawing.Point(240, 230);
+            this.checkBoxDoSnaps.Location = new System.Drawing.Point(237, 175);
             this.checkBoxDoSnaps.Name = "checkBoxDoSnaps";
             this.checkBoxDoSnaps.Size = new System.Drawing.Size(124, 17);
             this.checkBoxDoSnaps.TabIndex = 8;
@@ -266,7 +242,7 @@
             this.buttonGuide.BackColor = System.Drawing.Color.Gold;
             this.buttonGuide.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonGuide.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonGuide.Location = new System.Drawing.Point(240, 168);
+            this.buttonGuide.Location = new System.Drawing.Point(238, 97);
             this.buttonGuide.Name = "buttonGuide";
             this.buttonGuide.Size = new System.Drawing.Size(304, 56);
             this.buttonGuide.TabIndex = 7;
@@ -279,7 +255,7 @@
             this.groupBox1.Controls.Add(this.groupBoxOneSystem);
             this.groupBox1.Controls.Add(this.checkBoxSkipPlats);
             this.groupBox1.Controls.Add(this.checkBoxAutoRename);
-            this.groupBox1.Location = new System.Drawing.Point(232, 352);
+            this.groupBox1.Location = new System.Drawing.Point(230, 263);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(312, 136);
             this.groupBox1.TabIndex = 12;
@@ -289,88 +265,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 192);
+            this.label2.Location = new System.Drawing.Point(6, 103);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(139, 13);
             this.label2.TabIndex = 13;
             this.label2.Text = "Missing files before scraping";
-            // 
-            // checkBoxDoAudio
-            // 
-            this.checkBoxDoAudio.AutoSize = true;
-            this.checkBoxDoAudio.Location = new System.Drawing.Point(240, 276);
-            this.checkBoxDoAudio.Name = "checkBoxDoAudio";
-            this.checkBoxDoAudio.Size = new System.Drawing.Size(94, 17);
-            this.checkBoxDoAudio.TabIndex = 14;
-            this.checkBoxDoAudio.Text = "Run For Audio";
-            this.checkBoxDoAudio.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxDoImages
-            // 
-            this.checkBoxDoImages.AutoSize = true;
-            this.checkBoxDoImages.Location = new System.Drawing.Point(240, 299);
-            this.checkBoxDoImages.Name = "checkBoxDoImages";
-            this.checkBoxDoImages.Size = new System.Drawing.Size(101, 17);
-            this.checkBoxDoImages.TabIndex = 15;
-            this.checkBoxDoImages.Text = "Run For Images";
-            this.checkBoxDoImages.UseVisualStyleBackColor = true;
-            // 
-            // audioPathBrowseButton
-            // 
-            this.audioPathBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.audioPathBrowseButton.Location = new System.Drawing.Point(480, 86);
-            this.audioPathBrowseButton.Name = "audioPathBrowseButton";
-            this.audioPathBrowseButton.Size = new System.Drawing.Size(64, 28);
-            this.audioPathBrowseButton.TabIndex = 18;
-            this.audioPathBrowseButton.Text = "Browse";
-            this.audioPathBrowseButton.UseVisualStyleBackColor = true;
-            this.audioPathBrowseButton.Click += new System.EventHandler(this.AudioPathBrowseButton_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 94);
-            this.label3.MaximumSize = new System.Drawing.Size(110, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 26);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "All platforms original audio path";
-            // 
-            // imagesPathBrowseButton
-            // 
-            this.imagesPathBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.imagesPathBrowseButton.Location = new System.Drawing.Point(480, 123);
-            this.imagesPathBrowseButton.Name = "imagesPathBrowseButton";
-            this.imagesPathBrowseButton.Size = new System.Drawing.Size(64, 28);
-            this.imagesPathBrowseButton.TabIndex = 21;
-            this.imagesPathBrowseButton.Text = "Browse";
-            this.imagesPathBrowseButton.UseVisualStyleBackColor = true;
-            this.imagesPathBrowseButton.Click += new System.EventHandler(this.ImagesPathBrowseButton_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 131);
-            this.label4.MaximumSize = new System.Drawing.Size(110, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(102, 26);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "All platforms original images path";
             // 
             // LaunchboxLocalScraper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(554, 499);
-            this.Controls.Add(this.imagesPathBrowseButton);
-            this.Controls.Add(this.textBoxImagesPath);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.audioPathBrowseButton);
-            this.Controls.Add(this.textBoxAudioPath);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.checkBoxDoImages);
-            this.Controls.Add(this.checkBoxDoAudio);
+            this.ClientSize = new System.Drawing.Size(554, 403);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonCorrectVideoFoldersName);
             this.Controls.Add(this.groupBox1);
@@ -424,14 +330,6 @@
         private System.Windows.Forms.Button buttonGuide;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBoxDoAudio;
-        private System.Windows.Forms.CheckBox checkBoxDoImages;
-        private System.Windows.Forms.Button audioPathBrowseButton;
-        private System.Windows.Forms.TextBox textBoxAudioPath;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button imagesPathBrowseButton;
-        private System.Windows.Forms.TextBox textBoxImagesPath;
-        private System.Windows.Forms.Label label4;
     }
 }
 

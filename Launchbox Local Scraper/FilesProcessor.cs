@@ -25,10 +25,6 @@ namespace Launchbox_Local_Scraper
         bool doThemes;
         bool doSnaps;
 
-        bool doAudio;
-        bool doImages;
-        string allAudioPath;
-        string allImagesPath;
 
         int maxTries;
 
@@ -41,8 +37,7 @@ namespace Launchbox_Local_Scraper
         //string currPlatOriginalVidPath;
 
         public filesProcessor(string launchboxPath, string allVideosPath, bool autoRenameOriginal, XmlDocument launchboxSettingsFile, XmlNodeList xmListPlatforms,
-            bool weAreOnlyDoingOnePlatform , ListBox listboxGames, bool skipPlats, bool isAllVideosPathOnANetwork, int maxTries, bool doThemes, bool doSnaps,
-            bool doAudio, bool doImages, string allAudioPath, string allImagesPath)
+            bool weAreOnlyDoingOnePlatform , ListBox listboxGames, bool skipPlats, bool isAllVideosPathOnANetwork, int maxTries, bool doThemes, bool doSnaps)
         {
             this.lbPath = launchboxPath;
             this.allVideosPath = allVideosPath;
@@ -56,10 +51,9 @@ namespace Launchbox_Local_Scraper
             this.maxTries = maxTries;
             this.doSnaps = doSnaps;
             this.doThemes = doThemes;
-            this.doAudio = doAudio;
-            this.doImages = doImages;
-            this.allAudioPath = allAudioPath;
-            this.allImagesPath = allImagesPath;
+ 
+   
+
         }
 
         public string currentPlatform
@@ -112,13 +106,6 @@ namespace Launchbox_Local_Scraper
 
             string currPlatOriginalVidPath = getCurrentPlatformOriginalVideosPath(weAreOnlyDoingOnePlatform);
 
-            string currentPlatformLBAudioPath = getLaunchBoxMediaPlatformPath(xmListPlatforms, "Music");
-
-            string currPlatOriginalAudioPath = getCurrentPlatformOriginaAudiolPath(weAreOnlyDoingOnePlatform);
-
-            string currentPlatformLBImagesPath = getLaunchBoxMediaPlatformPath(xmListPlatforms, "Images");  
-
-            string currPlatOriginalImagesPath = getCurrentPlatformOriginaImagesPath(weAreOnlyDoingOnePlatform);
 
             XmlNodeList xmlGames = getPlatformDataFile().SelectNodes("/LaunchBox/Game");
 
@@ -136,67 +123,11 @@ namespace Launchbox_Local_Scraper
                 keepGoing = doThemesVideos(xmlGames, ref filesToBeCopied, currentPlatformLBVidPath, currPlatOriginalVidPath);
             }
 
-            if (keepGoing && doAudio)
-            {
-                listboxGames.Items.Add("----Audio----");
-                keepGoing = doAudioFiles(xmlGames, ref filesToBeCopied, currentPlatformLBAudioPath, currPlatOriginalAudioPath);
-            }
-
-            if (keepGoing && doImages)
-            {
-                listboxGames.Items.Add("----Images----");
-                keepGoing = doThemesVideos(xmlGames, ref filesToBeCopied, currentPlatformLBImagesPath, currPlatOriginalImagesPath);
-            }
-
             return keepGoing;//was true
         }
         
-        private bool doAudioFiles(XmlNodeList xmlGames, ref List<FileToBeCopied> filesToBeCopied,
-            string currentPlatformLBAudioPath, string currPlatOriginalAudioPath)
-        {
-            List<XmlNode> xmlGamesMissingFiles = new List<XmlNode>();
-            int nOfMissing = getGamesWithMissingAudioFiles(xmlGames, ref xmlGamesMissingFiles, currentPlatformLBAudioPath);
-            if (nOfMissing == 0) return true;
+      
 
-            fillListBoxWithMissingGames(xmlGamesMissingFiles, listboxGames);
-
-            if (!Directory.Exists(currPlatOriginalAudioPath))
-                return (askUserIfWeShouldContinue());
-
-            string[] candidateFilesPaths = getCandidateFilesPaths(currPlatOriginalAudioPath);
-
-            foreach (XmlNode xmlNodeGame in xmlGamesMissingFiles)
-            {
-                if (findBestFile(xmlNodeGame, currentPlatformLBAudioPath, currPlatOriginalAudioPath,
-                isAllVideosPathOnANetwork, ref filesToBeCopied, ref candidateFilesPaths, false)
-                == false)
-                    return false;
-            }
-            return true;
-        }
-
-        private bool doImageFiles(XmlNodeList xmlGames, ref List<FileToBeCopied> filesToBeCopied,
-    string currentPlatformLBImagesdPath, string currPlatOriginalImagesPath)
-        {
-            List<XmlNode> xmlGamesMissingFiles = new List<XmlNode>();
-            int nOfMissing = getGamesWithMissingImageFiles(xmlGames, ref xmlGamesMissingFiles, currentPlatformLBImagesdPath);
-            if (nOfMissing == 0) return true;
-            fillListBoxWithMissingGames(xmlGamesMissingFiles, listboxGames);
-
-            if (!Directory.Exists(currPlatOriginalImagesPath))
-                return (askUserIfWeShouldContinue());
-
-            string[] candidateFilesPaths = getCandidateFilesPaths(currPlatOriginalImagesPath);
-
-            foreach (XmlNode xmlNodeGame in xmlGamesMissingFiles)
-            {
-                if (findBestFile(xmlNodeGame, currentPlatformLBImagesdPath, currPlatOriginalImagesPath,
-                isAllVideosPathOnANetwork, ref filesToBeCopied, ref candidateFilesPaths, false)
-                == false)
-                    return false;
-            }
-            return true;
-        }
 
         private bool doNormalVideos(XmlNodeList xmlGames, ref List<FileToBeCopied>  filesToBeCopied,
             string currentPlatformLBVidPath, string currPlatOriginalVidPath)
@@ -499,57 +430,14 @@ namespace Launchbox_Local_Scraper
                 return Path.GetFullPath(this.allVideosPath + @"\" + this.currentPlat);
         }
 
-        public string getCurrentPlatformOriginaAudiolPath(bool weAreOnlyDoingOnePlatform)
-        {
-            if (weAreOnlyDoingOnePlatform)
-                return allAudioPath;
-            else
-                return Path.GetFullPath(this.allAudioPath + @"\" + this.currentPlat);
-        }
-
-        public string getCurrentPlatformOriginaImagesPath(bool weAreOnlyDoingOnePlatform)
-        {
-            if (weAreOnlyDoingOnePlatform)
-                return allImagesPath;
-            else
-                return Path.GetFullPath(this.allImagesPath + @"\" + this.currentPlat);
-        }
 
 
-        
-            public int getGamesWithMissingAudioFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBAudioPath)
-        {
-            int nOfMissing = 0;
 
-            foreach (XmlNode xmlNodeGame in xnList)
-            {
-                if (checkIfAudioExistsInLBVidFolderAndDatabase(xmlNodeGame, lBAudioPath))
-                    continue;
-                else
-                {
-                    xmlGamesMissingFiles.Add(xmlNodeGame);
-                    nOfMissing++;
-                }
-            }
-            return nOfMissing;
-        }
 
-        public int getGamesWithMissingImageFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBImagesPath)
-        {
-            int nOfMissing = 0;
 
-            foreach (XmlNode xmlNodeGame in xnList)
-            {
-                if (checkIfVidExistsInLBVidFolderAndDatabase(xmlNodeGame, lBImagesPath))
-                    continue;
-                else
-                {
-                    xmlGamesMissingFiles.Add(xmlNodeGame);
-                    nOfMissing++;
-                }
-            }
-            return nOfMissing;
-        }
+      
+
+
 
 
         public int getGamesWithMissingVideoFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBVideoPath)
@@ -575,17 +463,9 @@ namespace Launchbox_Local_Scraper
             
         }
 
-        public bool checkIfAudioExistsInLBVidFolderAndDatabase(XmlNode game, string gamePlatAudioPath)
-        {
-            return (game["MissingMusic"].InnerText == "false" || checkIfMediaFileExists(game, gamePlatAudioPath));
-           
-        }
 
-        public bool checkIfImagesExistsInLBVidFolderAndDatabase(XmlNode game, string gamePlatVidPath)/////////////////////////////////////SHITSHOWSIC
-        {
-            return (game["MissingVideo"].InnerText == "false" || checkIfMediaFileExists(game, gamePlatVidPath));
-            
-        }
+
+
 
         public bool checkIfMediaFileExists(XmlNode game, string gamePlatMediaPath)
         {
@@ -620,7 +500,7 @@ namespace Launchbox_Local_Scraper
             return false;
         }
 
-        //mediaType can be either "Video", or "Music", or "Images"
+        //mediaType can be either "Video"
         public string getLaunchBoxMediaPlatformPath(XmlNodeList xmListPlatforms, string mediaType)
         {
             string currPlatlBVidPath = "not defined";
