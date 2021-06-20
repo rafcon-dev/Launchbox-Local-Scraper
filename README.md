@@ -18,10 +18,10 @@ This program does that automatically for you.
 ------------How do you use this program then??------------
 Glad you ask!
 
--1: set the path of your launchbox installation. Usually C:\program Files\Launchbox for example
--2: set the path of the folder in which you have your full video collection. For example D:\Launchbox Videos\
--3: Check the checkboxes "Run for videos snaps" and "Run for Themes" depending on if you want to get game snaps, theme videos, or both
--4: Press Run
+-1: set the path of your launchbox installation. Usually C:\program Files\Launchbox for example  
+-2: set the path of the folder in which you have your full video collection. For example D:\Launchbox Videos\  
+-3: Check the checkboxes "Run for videos snaps" and "Run for Themes" depending on if you want to get game snaps, theme videos, or both  
+-4: Press Run  
 
 -----------------------------------------------------------------------------------------------------------
 
