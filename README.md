@@ -12,7 +12,7 @@ Now, you might just have them all in your launchbox\videos\ folder, and everythi
 However, you might prefer to have only some games that you like in your launchbox installation, in a faster SSD, or you might have a Raspberry Pi, which has limited space.  
 In those cases, you will want to only get the videos that correspond to the games you have in launchbox.  
 This program does that automatically for you.  
-It will check the file names against the closest correct games names, and continuously ask the user if a a correct match was found. This program was built to be extremely fast and intuitive to use.
+It will check all the file names against the closest correct game names, and continuously ask the user if a a correct match was found. This program was built to be extremely fast and intuitive to use.
 
 -----------------------------------------------------------------------------------------------------------  
 
