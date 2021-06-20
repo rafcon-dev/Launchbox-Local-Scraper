@@ -44,4 +44,5 @@ To do that, check "Run for One Platform Only", press "Get Platforms" and select 
 
 Any suggestions, you can find me on Launchbox's forum.
 You're welcome. Be happy.
-                                                                              Starplayer 
+
+Starplayer 
