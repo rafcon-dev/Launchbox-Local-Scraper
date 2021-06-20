@@ -11,43 +11,42 @@ using static Launchbox_Local_Scraper.generalUtils;
 
 namespace Launchbox_Local_Scraper
 {
-    class filesProcessor
+    class FilesProcessor
     {
-        string lbPath;
-        string allVideosPath;
+        readonly string lbPath;
+        readonly string allVideosPath;
 
         string currentPlat;
         bool weAreDoingArcade = false;
-        bool autoRenameOriginal;
-        bool weAreOnlyDoingOnePlatform;
-        bool skipPlats;
-        bool isAllVideosPathOnANetwork;
-        bool doThemes;
-        bool doSnaps;
+        readonly bool autoRenameOriginal;
+        readonly bool weAreOnlyDoingOnePlatform;
+        readonly bool skipPlats;
+        readonly bool doThemes;
+        readonly bool doSnaps;
 
 
-        int maxTries;
+        readonly int maxTries;
 
-        XmlDocument launchboxSettingsFile;
-        XmlNodeList xmListPlatforms;
+       
+        readonly XmlNodeList xmListPlatforms;
 
-        ListBox listboxGames;
+        readonly ListBox listboxGames;
 
        // string currentPlatformLBVidPath;
         //string currPlatOriginalVidPath;
 
-        public filesProcessor(string launchboxPath, string allVideosPath, bool autoRenameOriginal, XmlDocument launchboxSettingsFile, XmlNodeList xmListPlatforms,
-            bool weAreOnlyDoingOnePlatform , ListBox listboxGames, bool skipPlats, bool isAllVideosPathOnANetwork, int maxTries, bool doThemes, bool doSnaps)
+        public FilesProcessor(string launchboxPath, string allVideosPath, bool autoRenameOriginal, XmlNodeList xmListPlatforms,
+            bool weAreOnlyDoingOnePlatform , ListBox listboxGames, bool skipPlats, int maxTries, bool doThemes, bool doSnaps)
         {
             this.lbPath = launchboxPath;
             this.allVideosPath = allVideosPath;
             this.autoRenameOriginal = autoRenameOriginal;
-            this.launchboxSettingsFile = launchboxSettingsFile;
+           
             this.xmListPlatforms =  xmListPlatforms;
             this.weAreOnlyDoingOnePlatform = weAreOnlyDoingOnePlatform;
             this.listboxGames = listboxGames;
             this.skipPlats = skipPlats;
-            this.isAllVideosPathOnANetwork = isAllVideosPathOnANetwork;
+           
             this.maxTries = maxTries;
             this.doSnaps = doSnaps;
             this.doThemes = doThemes;
@@ -56,7 +55,7 @@ namespace Launchbox_Local_Scraper
 
         }
 
-        public string currentPlatform
+        public string CurrentPlatform
         {
             get
             {
@@ -73,7 +72,7 @@ namespace Launchbox_Local_Scraper
             }
         }
 
-        bool askUserIfWeShouldContinue()
+        bool AskUserIfWeShouldContinue()
         {
             bool shouldWeContinue = true;
 
@@ -90,7 +89,7 @@ namespace Launchbox_Local_Scraper
             return shouldWeContinue;
         }
 
-        private void fillListBoxWithMissingGames(List<XmlNode> xmlGamesMissingFiles, ListBox listBoxGames)
+        private void FillListBoxWithMissingGames(List<XmlNode> xmlGamesMissingFiles, ListBox listBoxGames)
         {
             foreach (XmlNode xmlNodeGame in xmlGamesMissingFiles)
             {
@@ -98,29 +97,27 @@ namespace Launchbox_Local_Scraper
             }
         }
 
-        public bool processPlatform(ref List<FileToBeCopied> filesToBeCopied)
+        public bool ProcessPlatform()
         {
             bool keepGoing = true;
 
-            string currentPlatformLBVidPath = getLaunchBoxMediaPlatformPath(xmListPlatforms, "Video");
+            string currentPlatformLBVidPath = GetLaunchBoxMediaPlatformPath(xmListPlatforms, "Video");
 
-            string currPlatOriginalVidPath = getCurrentPlatformOriginalVideosPath(weAreOnlyDoingOnePlatform);
+            string currPlatOriginalVidPath = GetCurrentPlatformOriginalVideosPath(weAreOnlyDoingOnePlatform);
 
 
-            XmlNodeList xmlGames = getPlatformDataFile().SelectNodes("/LaunchBox/Game");
-
-            //string folderPlatName = new DirectoryInfo(currPlatOriginalVidPath).Name;
+            XmlNodeList xmlGames = GetPlatformDataFile().SelectNodes("/LaunchBox/Game");
 
             if(keepGoing && doSnaps)
             {
                 listboxGames.Items.Add("----Snaps----");
-                keepGoing = (doNormalVideos(xmlGames, ref filesToBeCopied, currentPlatformLBVidPath, currPlatOriginalVidPath));
+                keepGoing = (DoNormalVideos(xmlGames, currentPlatformLBVidPath, currPlatOriginalVidPath));
             }
 
             if (keepGoing && doThemes)
             {
                 listboxGames.Items.Add("----Themes----");
-                keepGoing = doThemesVideos(xmlGames, ref filesToBeCopied, currentPlatformLBVidPath, currPlatOriginalVidPath);
+                keepGoing = DoThemesVideos(xmlGames, currentPlatformLBVidPath, currPlatOriginalVidPath);
             }
 
             return keepGoing;//was true
@@ -129,53 +126,53 @@ namespace Launchbox_Local_Scraper
       
 
 
-        private bool doNormalVideos(XmlNodeList xmlGames, ref List<FileToBeCopied>  filesToBeCopied,
+        private bool DoNormalVideos(XmlNodeList xmlGames,
             string currentPlatformLBVidPath, string currPlatOriginalVidPath)
         {
             List<XmlNode> xmlGamesMissingFiles = new List<XmlNode>();
-            int nOfMissing = getGamesWithMissingVideoFiles(xmlGames, ref xmlGamesMissingFiles, currentPlatformLBVidPath);
+            int nOfMissing = GetGamesWithMissingVideoFiles(xmlGames, ref xmlGamesMissingFiles, currentPlatformLBVidPath);
             if (nOfMissing == 0) return true;
-            fillListBoxWithMissingGames(xmlGamesMissingFiles, listboxGames);
+            FillListBoxWithMissingGames(xmlGamesMissingFiles, listboxGames);
 
             if (!Directory.Exists(currPlatOriginalVidPath))
-                return (askUserIfWeShouldContinue());
+                return (AskUserIfWeShouldContinue());
 
-            string[] candidateFilesPaths = getCandidateFilesPaths(currPlatOriginalVidPath);
+            string[] candidateFilesPaths = GetCandidateFilesPaths(currPlatOriginalVidPath);
 
                 foreach (XmlNode xmlNodeGame in xmlGamesMissingFiles)
             {
-                    if (findBestFile(xmlNodeGame, currentPlatformLBVidPath, currPlatOriginalVidPath,
-                    isAllVideosPathOnANetwork, ref filesToBeCopied, ref candidateFilesPaths, false)
+                    if (FindBestFile(xmlNodeGame, currentPlatformLBVidPath, currPlatOriginalVidPath,
+                   ref candidateFilesPaths, false)
                     == false)
                         return false;
             }
             return true;
         }
 
-        private bool doThemesVideos(XmlNodeList xmlGames, ref List<FileToBeCopied> filesToBeCopied,
+        private bool DoThemesVideos(XmlNodeList xmlGames,
             string currentPlatformLBVidPath, string currPlatOriginalVidPath)
         {
             string currPlatLbThemeFolder = Path.GetFullPath(currentPlatformLBVidPath + @"\" + "theme");
             string currPlatOriginalThemeFolder = Path.GetFullPath(currPlatOriginalVidPath + @"\" + "theme");
 
             List<XmlNode> xmlGamesMissingFiles = new List<XmlNode>();
-            int nOfMissing = getGamesWithMissingThemeFiles(xmlGames, ref xmlGamesMissingFiles, currPlatLbThemeFolder);
+            int nOfMissing = GetGamesWithMissingThemeFiles(xmlGames, ref xmlGamesMissingFiles, currPlatLbThemeFolder);
             if (nOfMissing == 0) return true;
-            fillListBoxWithMissingGames(xmlGamesMissingFiles, listboxGames);
+            FillListBoxWithMissingGames(xmlGamesMissingFiles, listboxGames);
 
             if (!Directory.Exists(currPlatOriginalThemeFolder))
-                return (askUserIfWeShouldContinue());
+                return (AskUserIfWeShouldContinue());
 
             createFolderIfDoesntExist(currPlatLbThemeFolder);
 
-            string[] candidateFilesPaths = getCandidateFilesPaths(currPlatOriginalThemeFolder);
+            string[] candidateFilesPaths = GetCandidateFilesPaths(currPlatOriginalThemeFolder);
 
             foreach (XmlNode xmlNodeGame in xmlGames)
             {
-                if (!checkIfMediaFileExists(xmlNodeGame, currPlatLbThemeFolder))
+                if (!CheckIfMediaFileExists(xmlNodeGame, currPlatLbThemeFolder))
                 {
-                    if (findBestFile(xmlNodeGame, currPlatLbThemeFolder, currPlatOriginalThemeFolder,
-                    isAllVideosPathOnANetwork, ref filesToBeCopied, ref candidateFilesPaths, true)
+                    if (FindBestFile(xmlNodeGame, currPlatLbThemeFolder, currPlatOriginalThemeFolder,
+                    ref candidateFilesPaths, true)
                     == false)
                         return false;
                 }
@@ -183,13 +180,13 @@ namespace Launchbox_Local_Scraper
             return true;
         }
 
-        private int getGamesWithMissingThemeFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBThemeVideoPath)
+        private int GetGamesWithMissingThemeFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBThemeVideoPath)
         {
             int nOfMissing = 0;
 
             foreach (XmlNode xmlNodeGame in xnList)
             {
-                if (checkIfThemeVideoFileExists(xmlNodeGame, lBThemeVideoPath))
+                if (CheckIfThemeVideoFileExists(xmlNodeGame, lBThemeVideoPath))
                     continue;
                 else
                 {
@@ -200,21 +197,21 @@ namespace Launchbox_Local_Scraper
             return nOfMissing;
         }
 
-        bool checkIfThemeVideoFileExists(XmlNode game, string gamePlatVidPath)
+        bool CheckIfThemeVideoFileExists(XmlNode game, string gamePlatVidPath)
         {
                    
             string fileName;
 
             if (weAreDoingArcade)
-                fileName = getRomFileName(game);
+                fileName = GetRomFileName(game);
             else
                 fileName = generalUtils.removeInvalidCharsWindowsFileSystem(game["Title"].InnerText);
 
-            return fileExistsIgnoreExtension(fileName, gamePlatVidPath);
+            return FileExistsIgnoreExtension(fileName, gamePlatVidPath);
       
     }
 
-        private List<string> getFileNamesWithoutExtensionsFromFullPaths(string[] fullPaths)
+        private List<string> GetFileNamesWithoutExtensionsFromFullPaths(string[] fullPaths)
         {
             List<string> candidateFilesNotFullPath = new List<string>();
             foreach (string fullPath in fullPaths)
@@ -224,7 +221,7 @@ namespace Launchbox_Local_Scraper
             return candidateFilesNotFullPath;
         }
 
-        private List<string> getExtensionsFromFullPaths(string[] fullPaths)
+        private List<string> GetExtensionsFromFullPaths(string[] fullPaths)
         {
             List<string> extensions = new List<string>();
             foreach (string fullPath in fullPaths)
@@ -235,7 +232,7 @@ namespace Launchbox_Local_Scraper
         }
 
 
-        List<int> getLimitedArrayOfIndexesOrderedByLeveshteinDistance(List<int> dists, int num)
+        List<int> GetLimitedArrayOfIndexesOrderedByLeveshteinDistance(List<int> dists, int num)
         {
             List<int> distsCopy = dists.ToList();
 
@@ -244,10 +241,10 @@ namespace Launchbox_Local_Scraper
             for (int i = 0; i < dists.Count; i++)
                 listOfIndexes.Add(i);
 
-            return getNumLowestValues(distsCopy, listOfIndexes, num);
+            return GetNumLowestValues(distsCopy, listOfIndexes, num);
         }
 
-        private static List<int> getNumLowestValues(List<int> list, List<int> secondListToSortByFirst, int numOfValues)//secondlistMustHave Same size as first
+        private static List<int> GetNumLowestValues(List<int> list, List<int> secondListToSortByFirst, int numOfValues)//secondlistMustHave Same size as first
         {
             List<int> lowestValues = new List<int>();
             List<int> secondListSortedByLowest = new List<int>();
@@ -279,20 +276,8 @@ namespace Launchbox_Local_Scraper
             return secondListSortedByLowest;
         }
 
-        List<int> getArrayOfIndexesOrderedByLeveshteinDistance(List<int> dists)
-        {
-            List<int> distsCopy = dists.ToList();
 
-            List<int> listOfIndexes = new List<int>();
-            //initialize 0,1,2,3,4,5,6...
-            for (int i = 0; i < dists.Count; i++)
-                listOfIndexes.Add(i);
-
-            generalUtils.IntArrayInsertionSort(distsCopy, listOfIndexes);
-            return listOfIndexes;
-        }
-
-        private DialogResult askUserIfVidIsOK(string nameOfCandidateFile, string gameName, int remainingTries, bool isTheme)
+        private DialogResult AskUserIfVidIsOK(string nameOfCandidateFile, string gameName, int remainingTries, bool isTheme)
         {
             DialogIsVideoOk dialog = new DialogIsVideoOk(nameOfCandidateFile, gameName, remainingTries, currentPlat, isTheme);
 
@@ -300,9 +285,9 @@ namespace Launchbox_Local_Scraper
 
             return dialog.ShowDialog();////////////////////////////////////////////////////////////////////////////
         }
-        private List<string> getCandidateFilesNames(string[] candidateFilesPaths)
+        private List<string> GetCandidateFilesNames(string[] candidateFilesPaths)
         {
-            List<string> fileNames = getFileNamesWithoutExtensionsFromFullPaths(candidateFilesPaths);
+            List<string> fileNames = GetFileNamesWithoutExtensionsFromFullPaths(candidateFilesPaths);
 
             if (weAreDoingArcade == true)
             {
@@ -322,9 +307,9 @@ namespace Launchbox_Local_Scraper
                 return fileNames;
     }
 
-        private bool findObviousArcadeFiles(XmlNode xmlNodeGame, string gameName, ref string[] candidateFilesPaths, List<string> candidateFilesExtensions, string romFileName, string currentPlatformLBVidPath, string currPlatOriginalVidPath)
+        private bool FindObviousArcadeFiles(string gameName, ref string[] candidateFilesPaths, List<string> candidateFilesExtensions, string romFileName, string currentPlatformLBVidPath, string currPlatOriginalVidPath)
         {
-            List<string> fileNames = getFileNamesWithoutExtensionsFromFullPaths(candidateFilesPaths);
+            List<string> fileNames = GetFileNamesWithoutExtensionsFromFullPaths(candidateFilesPaths);
             
 
             for (int i = 0; i < fileNames.Count(); i++)
@@ -334,27 +319,27 @@ namespace Launchbox_Local_Scraper
                     FileToBeCopied file = new FileToBeCopied(currentPlatformLBVidPath, currPlatOriginalVidPath, gameName,
                         candidateFilesExtensions[i], candidateFilesPaths[i], autoRenameOriginal, weAreDoingArcade, romFileName);
 
-                    candidateFilesPaths[i] = file.getNewOriginalFilePath();
-                    file.processFile();
+                    candidateFilesPaths[i] = file.GetNewOriginalFilePath();
+                    file.ProcessFile();
                     return true;
                 }
             }
             return false;
         }
 
-        private bool findFilesByAskingUser(string gameName, ref string[] candidateFilesPaths,
+        private bool FindFilesByAskingUser(string gameName, ref string[] candidateFilesPaths,
             List<string> candidateFilesExtensions, string romName, bool isTheme, string currentPlatformLBVidPath, string currPlatOriginalVidPath)
         {
             bool keepGoing = true; 
-            List<string> candidateFilesFullNamesOfGames = getCandidateFilesNames(candidateFilesPaths);
+            List<string> candidateFilesFullNamesOfGames = GetCandidateFilesNames(candidateFilesPaths);
 
             List<int> leveshteinDistances = stringDistances.leveshteinDistancesDiscardingCommonBetweenListAndString(candidateFilesFullNamesOfGames, gameName);
 
-            List<int> preferedVidCandidatesByOrder = getLimitedArrayOfIndexesOrderedByLeveshteinDistance(leveshteinDistances, maxTries);
+            List<int> preferedVidCandidatesByOrder = GetLimitedArrayOfIndexesOrderedByLeveshteinDistance(leveshteinDistances, maxTries);
 
             for (int i = 0; i < preferedVidCandidatesByOrder.Count && i < maxTries; i++)
             {
-                DialogResult result = askUserIfVidIsOK(candidateFilesFullNamesOfGames[preferedVidCandidatesByOrder[i]],
+                DialogResult result = AskUserIfVidIsOK(candidateFilesFullNamesOfGames[preferedVidCandidatesByOrder[i]],
                     gameName, maxTries - 1 - i, isTheme);
 
                 if (result == DialogResult.Yes)
@@ -364,9 +349,9 @@ namespace Launchbox_Local_Scraper
                         candidateFilesPaths[preferedVidCandidatesByOrder[i]],
                         autoRenameOriginal, weAreDoingArcade, romName);
 
-                    candidateFilesPaths[preferedVidCandidatesByOrder[i]] = file.getNewOriginalFilePath();  //candidateFilePathsHaveBeenChangedWithTheNewGame                  
+                    candidateFilesPaths[preferedVidCandidatesByOrder[i]] = file.GetNewOriginalFilePath();  //candidateFilePathsHaveBeenChangedWithTheNewGame                  
 
-                    file.processFile();
+                    file.ProcessFile();
 
                     break;//we're done with this game
                 }
@@ -383,28 +368,28 @@ namespace Launchbox_Local_Scraper
             return keepGoing;
         }
 
-        public bool findBestFile
+        public bool FindBestFile
     (XmlNode game, string currentPlatformLBVidPath, string currPlatOriginalVidPath,
-    bool isAllVideosPathOnANetwork, ref List<FileToBeCopied> filesToBeCopied, ref string[] candidateFilesPaths, bool isTheme)
+    ref string[] candidateFilesPaths, bool isTheme)
         {
             string gameName = game["Title"].InnerText;
 
             //List<string> candidateFilesNames = getFileNamesWithoutExtensionsFromFullPaths(candidateFilesPaths);
 
-            List<string> candidateFilesExtensions = getExtensionsFromFullPaths(candidateFilesPaths);
+            List<string> candidateFilesExtensions = GetExtensionsFromFullPaths(candidateFilesPaths);
 
-            string romFileName = getRomFileName(game);
+            string romFileName = GetRomFileName(game);
 
             if (weAreDoingArcade) //do the obvious first, files that have same name as roms...
             {
-                if (findObviousArcadeFiles(game, gameName, ref candidateFilesPaths, candidateFilesExtensions, romFileName, currentPlatformLBVidPath, currPlatOriginalVidPath))
+                if (FindObviousArcadeFiles(gameName, ref candidateFilesPaths, candidateFilesExtensions, romFileName, currentPlatformLBVidPath, currPlatOriginalVidPath))
                     return true;
             }
 
-            return findFilesByAskingUser(gameName, ref candidateFilesPaths, candidateFilesExtensions, romFileName, isTheme, currentPlatformLBVidPath, currPlatOriginalVidPath);
+            return FindFilesByAskingUser(gameName, ref candidateFilesPaths, candidateFilesExtensions, romFileName, isTheme, currentPlatformLBVidPath, currPlatOriginalVidPath);
         }
 
-        public XmlDocument getPlatformDataFile()
+        public XmlDocument GetPlatformDataFile()
         {
             XmlDocument platformDataFile = new XmlDocument();
 
@@ -422,7 +407,7 @@ namespace Launchbox_Local_Scraper
             return platformDataFile;
         }
 
-        public string getCurrentPlatformOriginalVideosPath(bool weAreOnlyDoingOnePlatform)
+        public string GetCurrentPlatformOriginalVideosPath(bool weAreOnlyDoingOnePlatform)
         {
             if (weAreOnlyDoingOnePlatform)
                 return allVideosPath;
@@ -440,13 +425,13 @@ namespace Launchbox_Local_Scraper
 
 
 
-        public int getGamesWithMissingVideoFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBVideoPath)
+        public int GetGamesWithMissingVideoFiles(XmlNodeList xnList, ref List<XmlNode> xmlGamesMissingFiles, string lBVideoPath)
         {
             int nOfMissing = 0;
 
             foreach (XmlNode xmlNodeGame in xnList)
             {
-                if (checkIfVidExistsInLBVidFolderAndDatabase(xmlNodeGame, lBVideoPath))
+                if (CheckIfVidExistsInLBVidFolderAndDatabase(xmlNodeGame, lBVideoPath))
                     continue;
                 else
                 {
@@ -457,9 +442,9 @@ namespace Launchbox_Local_Scraper
             return nOfMissing;
         }
 
-        public bool checkIfVidExistsInLBVidFolderAndDatabase(XmlNode game, string gamePlatVidPath)
+        public bool CheckIfVidExistsInLBVidFolderAndDatabase(XmlNode game, string gamePlatVidPath)
         {
-            return (game["MissingVideo"].InnerText == "false" || checkIfMediaFileExists(game, gamePlatVidPath));
+            return (game["MissingVideo"].InnerText == "false" || CheckIfMediaFileExists(game, gamePlatVidPath));
             
         }
 
@@ -467,25 +452,25 @@ namespace Launchbox_Local_Scraper
 
 
 
-        public bool checkIfMediaFileExists(XmlNode game, string gamePlatMediaPath)
+        public bool CheckIfMediaFileExists(XmlNode game, string gamePlatMediaPath)
         {
             string fileName;
 
             if (weAreDoingArcade)
-                fileName = getRomFileName(game);
+                fileName = GetRomFileName(game);
             else
                 fileName = generalUtils.removeInvalidCharsWindowsFileSystem(game["Title"].InnerText);
 
-            return fileExistsIgnoreExtension(fileName, gamePlatMediaPath);
+            return FileExistsIgnoreExtension(fileName, gamePlatMediaPath);
         }
 
-        private string getRomFileName(XmlNode game)
+        private string GetRomFileName(XmlNode game)
         {
             return Path.GetFileNameWithoutExtension(generalUtils.removeInvalidCharsForPaths(game["ApplicationPath"].InnerText));
         }
 
 
-        private bool fileExistsIgnoreExtension(string fileNameWithoutExtension, string directory)
+        private bool FileExistsIgnoreExtension(string fileNameWithoutExtension, string directory)
         {
             if (Directory.Exists(directory))
             {
@@ -501,7 +486,7 @@ namespace Launchbox_Local_Scraper
         }
 
         //mediaType can be either "Video"
-        public string getLaunchBoxMediaPlatformPath(XmlNodeList xmListPlatforms, string mediaType)
+        public string GetLaunchBoxMediaPlatformPath(XmlNodeList xmListPlatforms, string mediaType)
         {
             string currPlatlBVidPath = "not defined";
             foreach (XmlNode xmlNodePlatformFolder in xmListPlatforms)
@@ -518,7 +503,7 @@ namespace Launchbox_Local_Scraper
 
 
 
-        public string[] getCandidateFilesPaths(string originalMediaPaths)
+        public string[] GetCandidateFilesPaths(string originalMediaPaths)
         {
             try
             {

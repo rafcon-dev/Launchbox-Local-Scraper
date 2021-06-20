@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="generalUtils.cs" />
     <Compile Include="FilesProcessor.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HowToUse.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,12 +129,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Folder Selector\FolderSelect.csproj">
-      <Project>{f4a7ccff-3855-4f01-a146-4be677b5fc4a}</Project>
-      <Name>FolderSelect</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
@@ -151,7 +146,12 @@
     <Content Include="Image20000.ico" />
     <None Include="Resources\Image20000.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Folder Selector\FolderSelect.csproj">
+      <Project>{f4a7ccff-3855-4f01-a146-4be677b5fc4a}</Project>
+      <Name>FolderSelect</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

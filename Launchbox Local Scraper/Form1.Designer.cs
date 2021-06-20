@@ -67,7 +67,7 @@
             this.buttonRun.Text = "Run";
             this.toolTip1.SetToolTip(this.buttonRun, "For each game in launchbox, find the corresponding video form \"Videos Path\"");
             this.buttonRun.UseVisualStyleBackColor = false;
-            this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
+            this.buttonRun.Click += new System.EventHandler(this.ButtonRun_Click);
             // 
             // label1
             // 
@@ -77,7 +77,7 @@
             this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Launchbox Path";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.Click += new System.EventHandler(this.Label1_Click);
             // 
             // textBoxLBInstallationPath
             // 
@@ -125,7 +125,7 @@
             this.buttonCorrectVideoFoldersName.Text = "Correct Names of Video Folders";
             this.toolTip1.SetToolTip(this.buttonCorrectVideoFoldersName, "Matches the original videos folder names with those of launchbox");
             this.buttonCorrectVideoFoldersName.UseVisualStyleBackColor = false;
-            this.buttonCorrectVideoFoldersName.Click += new System.EventHandler(this.buttonCorrectVideoFoldersName_Click);
+            this.buttonCorrectVideoFoldersName.Click += new System.EventHandler(this.ButtonCorrectVideoFoldersName_Click);
             // 
             // buttonBrowserFolder
             // 
@@ -136,7 +136,7 @@
             this.buttonBrowserFolder.TabIndex = 2;
             this.buttonBrowserFolder.Text = "Browse";
             this.buttonBrowserFolder.UseVisualStyleBackColor = true;
-            this.buttonBrowserFolder.Click += new System.EventHandler(this.buttonBrowserFolder_Click);
+            this.buttonBrowserFolder.Click += new System.EventHandler(this.ButtonBrowserFolder_Click);
             // 
             // videosPathBrowseButton
             // 
@@ -147,7 +147,7 @@
             this.videosPathBrowseButton.TabIndex = 5;
             this.videosPathBrowseButton.Text = "Browse";
             this.videosPathBrowseButton.UseVisualStyleBackColor = true;
-            this.videosPathBrowseButton.Click += new System.EventHandler(this.videosPathBrowseButton_Click);
+            this.videosPathBrowseButton.Click += new System.EventHandler(this.VideosPathBrowseButton_Click);
             // 
             // checkBoxSkipPlats
             // 
@@ -190,7 +190,7 @@
             this.buttonGetSystems.TabIndex = 2;
             this.buttonGetSystems.Text = "Get Platforms";
             this.buttonGetSystems.UseVisualStyleBackColor = true;
-            this.buttonGetSystems.Click += new System.EventHandler(this.button1_Click);
+            this.buttonGetSystems.Click += new System.EventHandler(this.Button1_Click);
             // 
             // checkBoxRunForOnePlatform
             // 
@@ -202,7 +202,7 @@
             this.checkBoxRunForOnePlatform.TabIndex = 0;
             this.checkBoxRunForOnePlatform.Text = "Run For One Platform Only";
             this.checkBoxRunForOnePlatform.UseVisualStyleBackColor = true;
-            this.checkBoxRunForOnePlatform.CheckedChanged += new System.EventHandler(this.checkBoxRunForOnePlatform_CheckedChanged);
+            this.checkBoxRunForOnePlatform.CheckedChanged += new System.EventHandler(this.CheckBoxRunForOnePlatform_CheckedChanged);
             // 
             // groupBoxOneSystem
             // 
@@ -235,7 +235,7 @@
             this.checkBoxDoSnaps.TabIndex = 8;
             this.checkBoxDoSnaps.Text = "Run for Video Snaps";
             this.checkBoxDoSnaps.UseVisualStyleBackColor = true;
-            this.checkBoxDoSnaps.CheckedChanged += new System.EventHandler(this.checkBoxDoSnaps_CheckedChanged);
+            this.checkBoxDoSnaps.CheckedChanged += new System.EventHandler(this.CheckBoxDoSnaps_CheckedChanged);
             // 
             // buttonGuide
             // 
@@ -248,7 +248,7 @@
             this.buttonGuide.TabIndex = 7;
             this.buttonGuide.Text = "How do I use this program??";
             this.buttonGuide.UseVisualStyleBackColor = false;
-            this.buttonGuide.Click += new System.EventHandler(this.buttonGuide_Click);
+            this.buttonGuide.Click += new System.EventHandler(this.ButtonGuide_Click);
             // 
             // groupBox1
             // 

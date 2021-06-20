@@ -22,12 +22,12 @@ namespace Launchbox_Local_Scraper
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void Label1_Click(object sender, EventArgs e)
         {
 
         }
 
-        private bool weHavePlatSelected()
+        private bool WeHavePlatSelected()
         {
                 if(comboBoxPlatforms.Text == "")
                 {
@@ -37,9 +37,9 @@ namespace Launchbox_Local_Scraper
             return true;
         }
 
-        private void buttonRun_Click(object sender, EventArgs e)
+        private void ButtonRun_Click(object sender, EventArgs e)
         {
-            if (areBothPathsWrong())
+            if (AreBothPathsWrong())
                 return;
 
             listBoxGames.Items.Clear();
@@ -50,18 +50,15 @@ namespace Launchbox_Local_Scraper
             string lbPath = textBoxLBInstallationPath.Text;
             string allVideosPath = textBoxVidsPath.Text;
 
-
-            //  bool isAllVideosPathOnANetwork = checkIfOriginalFilesAreOnANetwork(allVideosPath);/////////////////////////////
-            bool isAllVideosPathOnANetwork = false;
             bool weAreOnlyDoingOnePlat = checkBoxRunForOnePlatform.Checked;
 
             int maxTriesPerGame = 10;
 
-            if (weAreOnlyDoingOnePlat && weHavePlatSelected() == false)
+            if (weAreOnlyDoingOnePlat && WeHavePlatSelected() == false)
                 return;
 
             ////get all platforms
-            XmlDocument lBSettingsFile = getLBSettingsFile(lbPath);
+            XmlDocument lBSettingsFile = GetLBSettingsFile(lbPath);
 
             XmlNodeList platXmlList;
 
@@ -72,35 +69,35 @@ namespace Launchbox_Local_Scraper
             else
                 platXmlList = lBSettingsFile.SelectNodes("/LaunchBox/Platform");
 
-            getFilesToBeCopied(ref filesToBeCopied, platXmlList, lbPath, allVideosPath,
-             maxTriesPerGame, skipPlats, doThemes, isAllVideosPathOnANetwork, weAreOnlyDoingOnePlat, doSnaps);
+            GetFilesToBeCopied(platXmlList, lbPath, allVideosPath,
+             maxTriesPerGame, skipPlats, doThemes, weAreOnlyDoingOnePlat, doSnaps);
 
             if (filesToBeCopied.Count > 0)
             {
                 foreach (FileToBeCopied file in filesToBeCopied)
-                    file.processFile();
+                    file.ProcessFile();
             }
 
             MessageBox.Show("All done for now!", "Nice!");
         }
 
-        private void getFilesToBeCopied(ref List<FileToBeCopied> filesToBeCopied, XmlNodeList platXmlList, string lbPath, 
-            string allVideosPath, int maxTries, bool skipPlats, bool doThemes, bool isAllVideosPathOnANetwork, bool weAreOnlyDoingOnePlatform, bool doSnaps)
+        private void GetFilesToBeCopied(XmlNodeList platXmlList, string lbPath, 
+            string allVideosPath, int maxTries, bool skipPlats, bool doThemes, bool weAreOnlyDoingOnePlatform, bool doSnaps)
         {
             
-            XmlDocument launchboxSettingsFile = getLBSettingsFile(lbPath);
+            XmlDocument launchboxSettingsFile = GetLBSettingsFile(lbPath);
 
             XmlNodeList xmListPlatforms = launchboxSettingsFile.SelectNodes("/LaunchBox/PlatformFolder");
 
-            filesProcessor filesProcessor = new filesProcessor(lbPath, allVideosPath, checkBoxAutoRename.Checked,
-                launchboxSettingsFile, xmListPlatforms, weAreOnlyDoingOnePlatform,  listBoxGames, skipPlats,  isAllVideosPathOnANetwork, maxTries, doThemes, doSnaps);
+            FilesProcessor filesProcessor = new FilesProcessor(lbPath, allVideosPath, checkBoxAutoRename.Checked,
+                 xmListPlatforms, weAreOnlyDoingOnePlatform,  listBoxGames, skipPlats, maxTries, doThemes, doSnaps);
 
             foreach (XmlNode gamePlat in platXmlList)
             {
-                filesProcessor.currentPlatform = gamePlat["Name"].InnerText;
-                listBoxGames.Items.Add("---" + filesProcessor.currentPlatform + "---");
+                filesProcessor.CurrentPlatform = gamePlat["Name"].InnerText;
+                listBoxGames.Items.Add("---" + filesProcessor.CurrentPlatform + "---");
 
-                if (filesProcessor.processPlatform(ref filesToBeCopied) == false)
+                if (filesProcessor.ProcessPlatform() == false)
                     break;
             }
         }
@@ -116,31 +113,7 @@ namespace Launchbox_Local_Scraper
         /// <param name="filesToBeCopied"></param>
         /// <returns></returns>
 
-        void copyFilesThatAreToBeCopied(List<FileToBeCopied> files)
-        {
-            foreach (FileToBeCopied file in files)
-            {
-                file.processFile();
-            }
-        }
-
-        string[] getOriginalVidsPaths(string allVidsPath)
-        {
-            try
-            {
-                return Directory.GetDirectories(allVidsPath);
-            }
-            catch (Exception except)
-            {
-                MessageBox.Show(
-                    "Couldn't get original video paths.\nMake sure the path is ok, and that you have persmissions.\n.Exception:" + except.Message.ToString());
-            }
-            return new string[] { };
-        }
-
-
-
-        private XmlDocument getLBSettingsFile(string lBPath)
+        private XmlDocument GetLBSettingsFile(string lBPath)
         {
             XmlDocument launchboxSettingsFile = new XmlDocument();
 
@@ -158,7 +131,7 @@ namespace Launchbox_Local_Scraper
             return launchboxSettingsFile;
         }
 
-        private XmlDocument getPlatformDataFile(string lBPath, string plat)
+        private XmlDocument GetPlatformDataFile(string lBPath, string plat)
         {
             XmlDocument platformDataFile = new XmlDocument();
 
@@ -189,7 +162,7 @@ namespace Launchbox_Local_Scraper
 
 
 
-        bool areBothPathsWrong()
+        bool AreBothPathsWrong()
         {
             if (!Directory.Exists(textBoxLBInstallationPath.Text) || !Directory.Exists(textBoxVidsPath.Text))
             {
@@ -199,9 +172,9 @@ namespace Launchbox_Local_Scraper
             return false;
         }
 
-        private void buttonCorrectVideoFoldersName_Click(object sender, EventArgs e)
+        private void ButtonCorrectVideoFoldersName_Click(object sender, EventArgs e)
         {
-            if (areBothPathsWrong())
+            if (AreBothPathsWrong())
                 return;
 
             string lbPath = textBoxLBInstallationPath.Text;
@@ -210,7 +183,7 @@ namespace Launchbox_Local_Scraper
 
             string[] originalVideoFilesPaths = Directory.GetDirectories(allVideosPath);
 
-            XmlDocument lBSettingsFile = getLBSettingsFile(lbPath);
+            XmlDocument lBSettingsFile = GetLBSettingsFile(lbPath);
 
             //foreach platform, check the name of the video folder and the name of the other original folder
 
@@ -229,7 +202,7 @@ namespace Launchbox_Local_Scraper
 
                     string lBVidFolderName = new DirectoryInfo(currentPlatformLBVideoPath).Name;
 
-                    if (isThisPlatformOriginalVideoPathCorrect(originalVideoFilesPaths, currentPlatformLBVideoPath))
+                    if (IsThisPlatformOriginalVideoPathCorrect(originalVideoFilesPaths, currentPlatformLBVideoPath))
                         continue;
 
                     foreach (string originalVideoFolderPath in originalVideoFilesPaths)
@@ -282,7 +255,7 @@ namespace Launchbox_Local_Scraper
             MessageBox.Show("All done for now!");
         }
 
-        private bool isThisPlatformOriginalVideoPathCorrect(string[] originalVideoFilesPaths, string platfrmLBVidPath)
+        private bool IsThisPlatformOriginalVideoPathCorrect(string[] originalVideoFilesPaths, string platfrmLBVidPath)
         {
             string lBVidFolderName = new DirectoryInfo(platfrmLBVidPath).Name;
 
@@ -308,7 +281,7 @@ namespace Launchbox_Local_Scraper
             checkBoxRunForOnePlatform.Checked = Properties.Settings.Default.runForOnePlatform;
             checkBoxDoThemes.Checked = Properties.Settings.Default.doThemesAlso;
             checkBoxDoSnaps.Checked = Properties.Settings.Default.doVideoSnaps;
-            enableOrDisableOnePlatformModeControls();
+            EnableOrDisableOnePlatformModeControls();
         }
 
         private void LaunchboxLocalScraper_FormClosing(object sender, FormClosingEventArgs e)
@@ -325,20 +298,19 @@ namespace Launchbox_Local_Scraper
             Properties.Settings.Default.Save();
         }
 
-        private void buttonBrowserFolder_Click(object sender, EventArgs e)
+        private void ButtonBrowserFolder_Click(object sender, EventArgs e)
         {
-            launchFolderBrowser("Select the Launchbox folder", textBoxLBInstallationPath);
+            LaunchFolderBrowser("Select the Launchbox folder", textBoxLBInstallationPath);
         }
 
-        private void videosPathBrowseButton_Click(object sender, EventArgs e)
+        private void VideosPathBrowseButton_Click(object sender, EventArgs e)
         {
-            launchFolderBrowser("Select the original videos folder", textBoxVidsPath);
+            LaunchFolderBrowser("Select the original videos folder", textBoxVidsPath);
         }
 
-        void launchFolderBrowser(string title, TextBox textBoxPath)
+        void LaunchFolderBrowser(string title, TextBox textBoxPath)
         {
-            var fsd = new FolderSelect.FolderSelectDialog();
-            fsd.Title = title;
+            var fsd = new FolderSelect.FolderSelectDialog() { Title = title };
 
             if (Directory.Exists(textBoxPath.Text))
                 fsd.InitialDirectory = textBoxPath.Text;
@@ -351,7 +323,7 @@ namespace Launchbox_Local_Scraper
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             string lbPath = textBoxLBInstallationPath.Text;
 
@@ -361,7 +333,7 @@ namespace Launchbox_Local_Scraper
                 return;
             }
 
-            XmlDocument lBSettingsFile = getLBSettingsFile(lbPath);
+            XmlDocument lBSettingsFile = GetLBSettingsFile(lbPath);
 
             XmlNodeList platXmlList = lBSettingsFile.SelectNodes("/LaunchBox/Platform");
 
@@ -384,26 +356,19 @@ namespace Launchbox_Local_Scraper
 
             //   groupBoxOneSystem.BackColor = Color.LimeGreen;
         }
-        private bool checkIfOriginalFilesAreOnANetwork(string originalFilesPath)
-        {
-            bool isAllVideosPathOnANetwork = new Uri(originalFilesPath).IsUnc;
-            if (isAllVideosPathOnANetwork)
-                MessageBox.Show("Original Videos are on a network path. Files will be copied at the end.");
 
-            return isAllVideosPathOnANetwork;
-        }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void Button1_Click_1(object sender, EventArgs e)
         {
          
         }
 
-        private void checkBoxRunForOnePlatform_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxRunForOnePlatform_CheckedChanged(object sender, EventArgs e)
         {
-            enableOrDisableOnePlatformModeControls();
+            EnableOrDisableOnePlatformModeControls();
         }
 
-        private void enableOrDisableOnePlatformModeControls()
+        private void EnableOrDisableOnePlatformModeControls()
         {
             if (checkBoxRunForOnePlatform.Checked)
             {
@@ -419,13 +384,13 @@ namespace Launchbox_Local_Scraper
             }
         }
 
-        private void buttonGuide_Click(object sender, EventArgs e)
+        private void ButtonGuide_Click(object sender, EventArgs e)
         {
             HowToUse howToUseForm = new HowToUse();
             howToUseForm.ShowDialog();
         }
 
-        private void checkBoxDoSnaps_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxDoSnaps_CheckedChanged(object sender, EventArgs e)
         {
 
         }
