@@ -1,3 +1,5 @@
+![alt text](https://forums.launchbox-app.com/uploads/monthly_2019_02/llst.png.47899c48356d3b7b33c697b91efda3a2.png)
+
 # Launchbox-Local-Scraper
 
  This program is a scraper for your video files, to be used with Launchbox, the rom manager software.
